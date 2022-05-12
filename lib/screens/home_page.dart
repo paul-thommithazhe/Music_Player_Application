@@ -1,25 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:music_player/provider/provider.dart';
-import 'package:music_player/screens/musicHomeScreen/music_list.dart';
-import 'package:music_player/screens/searchScreen/search_screen.dart';
+import 'package:music_player/screens/music_list.dart';
+import 'package:music_player/screens/playlist_screen.dart';
+import 'package:music_player/screens/search_screen.dart';
 import 'package:provider/provider.dart';
-
-import 'playlistScreen/playlist_screen.dart';
 
 class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
 
   PageController pageController = PageController(initialPage: 0);
-  List screens = [
-    const MusicList(),
-    SearchScreen(),
-    const PlaylistScreen(),
-  ];
-  final pages = [
+  List<Widget> screens = [
     MusicList(),
     SearchScreen(),
     PlaylistScreen(),
   ];
+
   IncrementIndex indexValue = IncrementIndex();
 
   List<BottomNavigationBarItem> bottomNavigationItems = [
@@ -31,23 +26,15 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print('home page build');
     var currentIndex = Provider.of<IncrementIndex>(context).getIndex;
     return Scaffold(
-      body: PageView(
-        controller: pageController,
-        children: pages,
-        onPageChanged: (index) {
-          pageController.jumpToPage(index);
-          context.read<IncrementIndex>().increment(index);
-        },
-      ),
+      body: screens[currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-        // type: BottomNavigationBarType.fixed,
         currentIndex: currentIndex,
         onTap: (index) {
-          pageController.jumpToPage(index);
-          context.read<IncrementIndex>().increment(index);
+          context.read<IncrementIndex>().update(index);
+          pageController.animateToPage(index,
+              duration: Duration(seconds: 1), curve: Curves.ease);
         },
         items: [
           ...bottomNavigationItems,
