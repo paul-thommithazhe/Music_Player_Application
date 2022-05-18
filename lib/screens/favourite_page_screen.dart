@@ -4,7 +4,10 @@ import 'package:lottie/lottie.dart';
 import 'package:music_player/functions/delete_songs.dart';
 import 'package:music_player/screens/music_detailed.dart';
 import 'package:music_player/screens/music_list.dart';
+import 'package:on_audio_query/on_audio_query.dart';
 import 'package:on_audio_room/on_audio_room.dart';
+
+import '../images.dart';
 
 class FavouritePage extends StatefulWidget {
   FavouritePage({Key? key}) : super(key: key);
@@ -34,56 +37,65 @@ class _FavouritePageState extends State<FavouritePage> {
             }
             if (item.data!.isEmpty) {
               return Center(
-                child: Column(
-                  children: [
-                    Lottie.asset('assets/lottie/flying-heart.json', width: 400),
-                    Text(
-                      'No Songs',
-                      style: TextStyle(color: Colors.white),
-                    )
-                  ],
+                child: Text(
+                  'No Songs',
+                  style: TextStyle(color: Colors.white),
                 ),
               );
             }
             List<FavoritesEntity> favorites = item.data!;
             return ListView.builder(
                 itemCount: favorites.length,
-                itemBuilder: (contex, index) {
+                itemBuilder: (contex, favindex) {
                   return ListTile(
+                    leading: QueryArtworkWidget(
+                      id: favorites[favindex].id,
+                      type: ArtworkType.AUDIO,
+                      artworkWidth: 50,
+                      artworkHeight: 70,
+                      artworkBorder: BorderRadius.circular(3),
+                      nullArtworkWidget: Container(
+                        decoration: BoxDecoration(
+                            image: DecorationImage(
+                                image: AssetImage(image6), fit: BoxFit.cover),
+                            borderRadius: BorderRadius.circular(3)),
+                        height: 60,
+                        width: 60,
+                      ),
+                    ),
                     onTap: () {
                       for (var item in favorites) {
-                        songAudio.add(
-                            //TODO
-                            Audio.file(item.lastData.toString(),
+                        songAudio.add(Audio.file(item.lastData.toString(),
                                 metas: Metas(
-                                    title: item.title, id: item.id.toString()))
+                                  title: item.title,
+                                  id: item.id.toString(),
+                                ))
                             //  page navigating and song playing in music detailed page
 
                             );
                       }
 
-                      int currentIndex = songs.indexWhere(
-                          (element) => element.title == favorites[index].title);
-
-                      print(currentIndex);
+                      // int currentIndex = songs.indexWhere((element) =>
+                      //     element.id.toString() ==
+                      //     favorites[favindex].id.toString());
 
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                           builder: (context) => MusicDetailedPage(
                             audio: songAudio,
-                            index: index,
+                            index: favindex,
                             songs: songs,
                           ),
                         ),
                       );
                     },
                     title: Text(
-                      favorites[index].title,
+                      favorites[favindex].title,
                       overflow: TextOverflow.ellipsis,
                     ),
                     subtitle: Text(
-                      favorites[index].album ?? 'Unknown',
+                      favorites[favindex].album ?? 'Unknown',
                       style: TextStyle(color: Colors.grey),
                     ),
                     trailing: IconButton(
@@ -94,12 +106,9 @@ class _FavouritePageState extends State<FavouritePage> {
                         onPressed: () {
                           setState(() {
                             deleteSong(
-                              favorites[index].key,
+                              favorites[favindex].key,
                             );
                           });
-                          print(
-                              'dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd');
-                          print(favorites[index].key);
                         }),
                   );
                 });

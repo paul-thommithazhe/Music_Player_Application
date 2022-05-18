@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:marquee/marquee.dart';
 import 'package:music_player/functions/delete_songs.dart';
 import 'package:music_player/images.dart';
@@ -44,36 +43,39 @@ class _MusicDetailedPageState extends State<MusicDetailedPage>
   void initState() {
     super.initState();
 
-    if (player.isPlaying.value &&
-        player.getCurrentAudioTitle == widget.audio[widget.index].metas.title) {
-      null;
-    } else {
-      player.open(Playlist(audios: widget.audio, startIndex: widget.index),
-          loopMode: LoopMode.playlist,
-          autoStart: true,
-          showNotification: true,
-          notificationSettings:
-              NotificationSettings(customPlayPauseAction: (players) {
-            if (players.isPlaying.value) {
-              player.pause();
-              iconController.reverse();
-            } else {
-              player.play();
-              iconController.forward();
-            }
-          }, customNextAction: (player) {
-            if (player.isPlaying.value) {
-              iconController.forward();
-              player.next();
-              player.play();
-            }
-          }, customPrevAction: (player) {
-            if (player.isPlaying.value) {
-              iconController.forward();
-              player.previous();
-            }
-          }));
-    }
+    WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
+      if (player.isPlaying.value &&
+          player.getCurrentAudioTitle ==
+              widget.audio[widget.index].metas.title) {
+        null;
+      } else {
+        player.open(Playlist(audios: widget.audio, startIndex: widget.index),
+            loopMode: LoopMode.playlist,
+            autoStart: true,
+            showNotification: true,
+            notificationSettings:
+                NotificationSettings(customPlayPauseAction: (players) {
+              if (players.isPlaying.value) {
+                player.pause();
+                iconController.reverse();
+              } else {
+                player.play();
+                iconController.forward();
+              }
+            }, customNextAction: (player) {
+              if (player.isPlaying.value) {
+                iconController.forward();
+                player.next();
+                player.play();
+              }
+            }, customPrevAction: (player) {
+              if (player.isPlaying.value) {
+                iconController.forward();
+                player.previous();
+              }
+            }));
+      }
+    });
 
     iconController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 700));
@@ -112,7 +114,7 @@ class _MusicDetailedPageState extends State<MusicDetailedPage>
                   iconSize: 40,
                   color: Colors.white,
                 ),
-                SizedBox(width: 213),
+                SizedBox(width: MediaQuery.of(context).size.width / 1.75),
                 player.builderRealtimePlayingInfos(
                   builder: (context, realtimePlayingInfos) => IconButton(
                     onPressed: () {
@@ -144,9 +146,8 @@ class _MusicDetailedPageState extends State<MusicDetailedPage>
               margin: EdgeInsets.only(left: 26, top: 20, right: 26),
               child: Column(
                 children: [
-                  leadingImage(widget.songs![currentIndex].id),
+                  leadingImage(int.parse(widget.audio[currentIndex].metas.id!)),
                   SizedBox(height: 30),
-                  
                   SizedBox(
                     height: 25,
                     width: 260,
@@ -154,7 +155,6 @@ class _MusicDetailedPageState extends State<MusicDetailedPage>
                         ? Marquee(
                             text: player.getCurrentAudioTitle,
                             style: TextStyle(color: Colors.white, fontSize: 20),
-                            // pauseAfterRound: Duration(seconds: 1),
                             crossAxisAlignment: CrossAxisAlignment.center,
                             blankSpace: 23,
                             startPadding: 100,
@@ -165,9 +165,6 @@ class _MusicDetailedPageState extends State<MusicDetailedPage>
                             style: TextStyle(color: Colors.white, fontSize: 20),
                           ),
                   ),
-                  SizedBox(height: 16),
-                  // Lottie.asset('assets/lottie/visualizer.json',
-                  //     animate: player.isPlaying.value ? true : false),
                   slider(context, realtimePlayingInfos),
                   SizedBox(
                     height: 40,
@@ -199,9 +196,6 @@ class _MusicDetailedPageState extends State<MusicDetailedPage>
                       ),
                       IconButton(
                         onPressed: () {
-                          // int songINdex = songs.indexWhere((element) =>
-                          //     element.title == songs[currentIndex].title);
-
                           if (isSongAdded) {
                             deleteSong(widget.songs![currentIndex].id);
 
@@ -242,8 +236,7 @@ class _MusicDetailedPageState extends State<MusicDetailedPage>
   }
 
   Row buildNextAndPausePreviousButton(int currentIndex) {
-    return Row(children: [
-      SizedBox(width: 45),
+    return Row(mainAxisAlignment: MainAxisAlignment.center, children: [
       IconButton(
         onPressed: onPressedPrevValue
             ? () {
@@ -259,48 +252,47 @@ class _MusicDetailedPageState extends State<MusicDetailedPage>
                   });
                 });
               }
-            : () {
-                // print('ddddddddddddddddd');
-              },
+            : () {},
         icon: Icon(Icons.skip_previous),
         iconSize: 48,
       ),
-      const SizedBox(
-        width: 20,
-      ),
-      Container(
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(100),
-            color: const Color.fromRGBO(255, 255, 255, 1)),
-        child:
-            player.builderRealtimePlayingInfos(builder: (contex, realTimeInfo) {
-          if (realTimeInfo.isPlaying) {
-            iconController.forward();
-          }
 
-          return GestureDetector(
-            onTap: () {
-              if (realTimeInfo.isPlaying) {
-                player.pause();
-                iconController.reverse();
-              } else {
-                player.play();
-                iconController.forward();
-              }
-            },
-            child: AnimatedIcon(
-              icon: AnimatedIcons.play_pause,
-              progress: iconController,
-              color: Colors.black,
-              size: 55,
-            ),
-          );
-        }),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: Container(
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(100),
+              color: const Color.fromRGBO(255, 255, 255, 1)),
+          child: player.builderRealtimePlayingInfos(
+              builder: (contex, realTimeInfo) {
+            if (realTimeInfo.isPlaying) {
+              iconController.forward();
+            }
+
+            return GestureDetector(
+              onTap: () {
+                if (realTimeInfo.isPlaying) {
+                  player.pause();
+                  iconController.reverse();
+                } else {
+                  player.play();
+                  iconController.forward();
+                }
+              },
+              child: AnimatedIcon(
+                icon: AnimatedIcons.play_pause,
+                progress: iconController,
+                color: Colors.black,
+                size: 55,
+              ),
+            );
+          }),
+        ),
       ),
-      const SizedBox(
-        width: 20,
-      ),
+      // const SizedBox(
+      //   width: 20,
+      // ),
       IconButton(
         onPressed: onPressedNextValue
             ? () {
@@ -349,9 +341,6 @@ class _MusicDetailedPageState extends State<MusicDetailedPage>
   }
 
   greenSlider(double value1, double value2) {
-    // value2 > 0 ? value2 : 0;
-    // value1 > 0 ? value1 : 0;
-
     try {
       return Slider(
           thumbColor: Color.fromARGB(255, 22, 181, 27),

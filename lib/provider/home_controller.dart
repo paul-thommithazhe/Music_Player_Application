@@ -6,9 +6,22 @@ import '../screens/music_list.dart';
 
 class HomeController extends ChangeNotifier {
   bool isList = true;
+  bool isNotify = true;
+  String? searchValue;
   static int selectedIndex = 0;
   int get getIndex {
     return selectedIndex;
+  }
+
+  bool get getNotify {
+    return isNotify;
+  }
+  searchedValue(value){
+    searchValue = value;
+  }
+  changeNotification() {
+    isNotify = !isNotify;
+    notifyListeners();
   }
 
   changeListView() {

@@ -72,17 +72,18 @@ class PlaylistScreen extends StatelessWidget {
                           }
                           List<PlaylistEntity> playLists = item.data!;
                           return ListView.separated(
+                            physics: BouncingScrollPhysics(),
                             itemBuilder: (context, index) {
                               return ListTile(
                                 onTap: () {
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (contex) =>
-                                              CreatedPlaylistPage(
-                                                playlistKey:
-                                                    playLists[index].key,
-                                              )));
+                                        builder: (contex) =>
+                                            CreatedPlaylistPage(
+                                          playlistKey: playLists[index].key,
+                                        ),
+                                      ));
                                 },
                                 leading: SizedBox(
                                   child: Lottie.asset(

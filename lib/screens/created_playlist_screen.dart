@@ -46,31 +46,34 @@ class _CreatedPlaylistPageState extends State<CreatedPlaylistPage> {
                       color: Colors.grey,
                       thickness: 0.1,
                     ),
-                    itemBuilder: (contex, index) {
+                    itemBuilder: (contex, plindex) {
                       List<SongEntity> playlist = item.data!;
                       return ListTile(
                         onTap: () {
                           for (var item in playlist) {
                             songAudio.add(
-                                //TODO
-                                Audio.file(item.lastData.toString(),
-                                    metas: Metas(
-                                        title: item.title,
-                                        id: item.id.toString()))
-                                //  page navigating and song playing in music detailed page
-
-                                );
+                              Audio.file(
+                                item.lastData.toString(),
+                                metas: Metas(
+                                  title: item.title,
+                                  id: item.id.toString(),
+                                ),
+                              ),
+                              //  page navigating and song playing in music detailed page
+                            );
                           }
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => MusicDetailedPage(
-                                      audio: songAudio,
-                                      index: index,
-                                      songs: songs)));
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => MusicDetailedPage(
+                                  audio: songAudio,
+                                  index: plindex,
+                                  songs: songs),
+                            ),
+                          );
                         },
                         title: Text(
-                          item.data![index].title,
+                          item.data![plindex].title,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
                         ),
@@ -80,7 +83,7 @@ class _CreatedPlaylistPageState extends State<CreatedPlaylistPage> {
                             color: Colors.red,
                           ),
                           onPressed: () {
-                            int songKey = item.data![index].id;
+                            int songKey = item.data![plindex].id;
 
                             setState(() {
                               deleteSong(songKey,

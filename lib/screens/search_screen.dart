@@ -2,7 +2,6 @@ import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:music_player/screens/music_detailed.dart';
 import 'package:music_player/screens/music_list.dart';
-import 'package:music_player/screens/playlist_screen.dart';
 
 class SearchScreen extends StatefulWidget {
   @override
@@ -20,17 +19,24 @@ class _SearchScreenState extends State<SearchScreen> {
       appBar: AppBar(
         backgroundColor: Color(0xFF181722),
         title: TextField(
+          cursorHeight: 22.0,
+           cursorColor: Colors.white,
           onChanged: (value) {
             setState(() {
               searchValue = value;
+              print(value);
+              print(searchValue);
+              print('=============================================================================================');
             });
           },
           style: TextStyle(color: Colors.white),
           decoration: InputDecoration(
               hintText: "Search Here....",
+              
               hintStyle: TextStyle(
-                  color: Color.fromARGB(255, 37, 225, 8),
-                  fontWeight: FontWeight.w900),
+                  color: Colors.white,
+                  
+                  fontWeight: FontWeight.w700,fontSize: 19),
               border: InputBorder.none),
         ),
       ),
@@ -48,6 +54,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 ),
               )
             : ListView.separated(
+              physics: BouncingScrollPhysics(),
                 itemCount: searchSongs.length,
                 separatorBuilder: (context, index) => const Divider(
                   color: Colors.grey,
@@ -69,7 +76,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           ),
                         );
                       }
-                      // searchedSongs.clear();
+                     
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -83,7 +90,7 @@ class _SearchScreenState extends State<SearchScreen> {
                     title: Text(
                       searchSongs[index].title,
                       style:
-                          TextStyle(color: Color.fromARGB(255, 112, 110, 110)),
+                          TextStyle(color: Color.fromARGB(255, 225, 215, 215)),
                     ),
                   );
                 },

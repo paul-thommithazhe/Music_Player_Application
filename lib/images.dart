@@ -4,4 +4,6 @@ String image3 = "assets/images/music_image.jpg";
 String image4 = "assets/images/music_image4.jpg";
 String image5 = "assets/images/neon_images3.jpg";
 String image6 = "assets/images/headphone.jpg";
+String image7 = "assets/images/logo.jpg";
+String image8 = "assets/images/logo2.png";
 

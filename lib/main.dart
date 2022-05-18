@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:music_player/model/playlist.dart';
 import 'package:music_player/provider/home_controller.dart';
+import 'package:music_player/screens/splash_screen.dart';
 import 'package:on_audio_room/on_audio_room.dart';
 import 'package:provider/provider.dart';
 import 'package:music_player/provider/provider.dart';
@@ -11,8 +12,20 @@ void main() async {
   runApp(MusicApp());
 }
 
-class MusicApp extends StatelessWidget {
+class MusicApp extends StatefulWidget {
   MusicApp({Key? key}) : super(key: key);
+
+  @override
+  State<MusicApp> createState() => _MusicAppState();
+}
+
+class _MusicAppState extends State<MusicApp> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    SplashScreen();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +39,7 @@ class MusicApp extends StatelessWidget {
         title: "Music",
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          appBarTheme: AppBarTheme(color:Color(0xFF181722) ),
+          appBarTheme: AppBarTheme(color: Color(0xFF181722)),
           bottomSheetTheme: BottomSheetThemeData(),
           iconTheme: IconThemeData(color: Colors.white),
           primaryColor: Color(0xFF070A0A),
@@ -36,8 +49,9 @@ class MusicApp extends StatelessWidget {
             titleMedium: TextStyle(color: Colors.white),
           ),
         ),
-        home: HomePage(),
+        home: SplashScreen(),
       ),
+      
     );
   }
 }

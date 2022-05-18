@@ -18,7 +18,7 @@ var sortType = SongSortType.TITLE;
 
 List<SongModel> songs = [];
 
-int currentIndex = 0;
+// int currentIndex = 0;
 
 class MusicList extends StatefulWidget {
   MusicList({Key? key}) : super(key: key);
@@ -41,33 +41,19 @@ class _MusicListState extends State<MusicList> {
     WidgetsBinding.instance!.addPostFrameCallback((timeStamp) {
       var controller = Provider.of<HomeController>(context, listen: false);
       controller.requestPermission();
+      print(controller.isNotify);
     });
-    // var controller = Provider.of<HomeController>(context, listen: false);
-    // controller.requestPermission();
   }
-
-  // @override
-  // void didUpdateWidget(covariant MusicList oldWidget) async {
-  //   Provider.of<HomeController>(context, listen: false).sortingMethod();
-  //   super.didUpdateWidget(oldWidget);
-  // }
-
-  // @override
-  // void didChangeDependencies() {
-  //   // TODO: implement didChangeDependencies
-  //   print(
-  //       'kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk');
-  //   var controller = Provider.of<HomeController>(context);
-  //   controller.sortingMethod();
-  //   super.didChangeDependencies();
-  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Color(0xFF181722),
-          title: Text('Music'),
+          title: Text(
+            'All Songs',
+            style: TextStyle(color: Colors.white),
+          ),
           centerTitle: true,
           actions: [
             IconButton(
@@ -76,6 +62,7 @@ class _MusicListState extends State<MusicList> {
                     .changeListView();
               },
               icon: Icon(Icons.grid_view),
+              iconSize: 23,
               color: Colors.white,
             ),
             PopupMenuButton(itemBuilder: (context) {
@@ -144,6 +131,7 @@ class _MusicListState extends State<MusicList> {
               return CupertinoScrollbar(
                 child: value.isList
                     ? ListView.builder(
+                        physics: BouncingScrollPhysics(),
                         itemBuilder: (context, index) {
                           SongModel song = songs[index];
 
@@ -259,12 +247,6 @@ class _MusicListState extends State<MusicList> {
           );
         }));
   }
-
-  // Future querySongs() async {
-  //   Provider.of<RadioButtonIndexChange>(context).getIndex == 0
-  //       ? querysongsWithTitle()
-  //       : querysongsWithDate();
-  // }
 
   querysongsWithTitle() async {
     print('hello');
